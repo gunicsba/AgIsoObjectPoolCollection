@@ -1,0 +1,100 @@
+name: Import IOPs
+
+# Copies VT object pools (.iop) from a source repository into iop/<type>/<BRAND>_<MODEL>.iop,
+# records repo, path, commit SHA and the source's declared licence in iop/SOURCES.md, keeps the
+# source licence text in iop/LICENSES/, and opens a pull request. Never commits to the default branch.
+#
+# The licence is recorded, not enforced. The AgIsoStack++ examples are MIT: their attribution stays
+# in iop/LICENSES/. Open-Agriculture/AgIsoVirtualTerminal had no .iop files when last checked.
+#
+# One-time repository setup: Settings > Actions > General > "Allow GitHub Actions to create and
+# approve pull requests". Optional secret PR_TOKEN: see import-ddops.yml.
+on:
+  workflow_dispatch:
+    inputs:
+      source_repo:
+        description: Repository to copy from (owner/name)
+        required: true
+        default: Open-Agriculture/AgIsoStack-plus-plus
+      ref:
+        description: Branch, tag or commit SHA (HEAD = the repository's default branch)
+        required: true
+        default: HEAD
+      path_glob:
+        description: Which files to copy; ** matches any number of directories
+        required: true
+        default: examples/**/*.iop
+      type:
+        description: Folder under iop/
+        required: true
+        type: choice
+        default: unsorted
+        options: [unsorted, sprayer, spreader, seeder, combined, tractor]
+      brand:
+        description: BRAND in the file names, A-Z and 0-9 (empty = first word of the repository name)
+        required: false
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: import-iops
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    env:
+      PYTHONUTF8: "1"
+      GH_TOKEN: ${{ secrets.PR_TOKEN || github.token }}
+      BASE_BRANCH: ${{ github.event.repository.default_branch }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          token: ${{ secrets.PR_TOKEN || github.token }}
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Import
+        env:
+          SOURCE_REPO: ${{ inputs.source_repo }}
+          SOURCE_REF: ${{ inputs.ref }}
+          PATH_GLOB: ${{ inputs.path_glob }}
+          POOL_TYPE: ${{ inputs.type }}
+          BRAND: ${{ inputs.brand }}
+        run: |
+          brand_args=()
+          if [ -n "$BRAND" ]; then brand_args=(--brand "$BRAND"); fi
+          python scripts/import_iops.py --repo "$SOURCE_REPO" --ref "$SOURCE_REF" --glob "$PATH_GLOB" \
+            --type "$POOL_TYPE" "${brand_args[@]}" | tee "$RUNNER_TEMP/import.log"
+
+      - name: Check
+        run: python scripts/check_pools.py
+
+      - name: Open pull request
+        env:
+          SOURCE_REPO: ${{ inputs.source_repo }}
+        run: |
+          if [ -z "$(git status --porcelain -- iop)" ]; then
+            echo "No changes under iop/; no pull request opened." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          {
+            echo "IOP files copied from \`$SOURCE_REPO\` by the *Import IOPs* workflow, run ${GITHUB_RUN_ID}."
+            echo "Per-file repo, path and commit, and the source's declared licence, are in \`iop/SOURCES.md\`."
+            echo
+            echo '```'
+            cat "$RUNNER_TEMP/import.log"
+            echo '```'
+          } > "$RUNNER_TEMP/pr-body.md"
+          bash scripts/open_pr.sh import-iops "Import IOPs from $SOURCE_REPO" "$RUNNER_TEMP/pr-body.md" iop
+          branch=$(git branch --show-current)
+          gh workflow run check.yml --ref "$branch" || echo "could not dispatch check.yml (run it manually)"

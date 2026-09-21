@@ -1,0 +1,95 @@
+name: Import IOPs from issues
+
+# Finds VT object pools (.iop) attached to issues of a source repository, groups the numbered files
+# of a multi-file pool, and opens a pull request adding them to iop/<type>/. A pool of several files
+# is stored as <BRAND>_<MODEL>.iop (the parts joined in order) next to a <BRAND>_<MODEL>/ folder
+# holding the parts. Never commits to the default branch.
+#
+# The working-set NAME in source paths carries the machine's identity number; it is zeroed in
+# everything recorded (iop/SOURCES.md, the report). Merging is plain concatenation grouped by the
+# Working Set rule and is not validated as a VT pool here: read the report before merging the PR.
+#
+# One-time repository setup: Settings > Actions > General > "Allow GitHub Actions to create and
+# approve pull requests". Optional secret PR_TOKEN: see import-ddops.yml.
+on:
+  workflow_dispatch:
+    inputs:
+      source_repo:
+        description: Repository whose issues to read (owner/name)
+        required: true
+        default: Open-Agriculture/AgIsoVirtualTerminal
+      issues:
+        description: Issue numbers, comma separated (empty = all issues)
+        required: false
+        default: ""
+      since:
+        description: Only issues, comments and updates on or after this date, YYYY-MM-DD (empty = no limit)
+        required: false
+        default: ""
+      type:
+        description: Folder under iop/
+        required: true
+        type: choice
+        default: unsorted
+        options: [unsorted, sprayer, spreader, seeder, combined, tractor]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: import-iop-issues
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    env:
+      PYTHONUTF8: "1"
+      GH_TOKEN: ${{ secrets.PR_TOKEN || github.token }}
+      BASE_BRANCH: ${{ github.event.repository.default_branch }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          token: ${{ secrets.PR_TOKEN || github.token }}
+      - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Import
+        # Inputs go through the environment, never into the script text.
+        env:
+          SOURCE_REPO: ${{ inputs.source_repo }}
+          ISSUES: ${{ inputs.issues }}
+          SINCE: ${{ inputs.since }}
+          POOL_TYPE: ${{ inputs.type }}
+        run: |
+          python scripts/import_iops_from_issues.py --repo "$SOURCE_REPO" --issues "$ISSUES" --since "$SINCE" \
+            --type "$POOL_TYPE" --report "$RUNNER_TEMP/report.md" | tee "$RUNNER_TEMP/import.log"
+
+      - name: Check
+        run: python scripts/check_pools.py
+
+      - name: Open pull request
+        env:
+          SOURCE_REPO: ${{ inputs.source_repo }}
+        run: |
+          if [ -z "$(git status --porcelain -- iop)" ]; then
+            echo "No new pools under iop/; no pull request opened." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
+          {
+            echo "IOP pools found in issues of \`$SOURCE_REPO\` by the *Import IOPs from issues* workflow, run ${GITHUB_RUN_ID}."
+            echo "Names are provisional (\`MFG<manufacturer code>_VT_<hash>\`); rename with the machine when known."
+            echo
+            head -c 60000 "$RUNNER_TEMP/report.md"
+          } > "$RUNNER_TEMP/pr-body.md"
+          bash scripts/open_pr.sh import-iop-issues "Import IOPs from issues of $SOURCE_REPO" "$RUNNER_TEMP/pr-body.md" iop
+          branch=$(git branch --show-current)
+          gh workflow run check.yml --ref "$branch" || echo "could not dispatch check.yml (run it manually)"
