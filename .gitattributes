@@ -1,0 +1,10 @@
+# Pools are binary; never touch their line endings.
+*.ddop binary
+*.iop binary
+
+# Text the scripts compare byte for byte, and scripts that must run on Linux runners.
+*.csv text eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.yml text eol=lf
