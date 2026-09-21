@@ -1,0 +1,74 @@
+name: Submit a DDOP
+description: Share the device description (DDOP) of an implement or tractor for the collection
+title: "DDOP: <brand> <model>"
+labels: ["ddop", "submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing a device description. A maintainer (or the *Import DDOPs* workflow) will
+        scrub it and add it to `ddop/`.
+
+        **Privacy: everything you attach here is public.** A DDOP carries the machine's serial number
+        (some are VIN-style) and the identity number inside its NAME. The import scrubs both, but the
+        file you attach here stays visible on this issue. If you can, zero them yourself first, and
+        never attach field data, task data or log files.
+  - type: input
+    id: machine
+    attributes:
+      label: Brand and model
+      description: As it appears on the machine, for example `KUHN ESPRO`.
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: Machine type
+      options:
+        - Sprayer
+        - Fertilizer spreader
+        - Seeder or single-product planter
+        - Combined (several products in one machine)
+        - Tractor
+        - Other or not sure
+    validations:
+      required: true
+  - type: input
+    id: sections
+    attributes:
+      label: Number of sections
+      description: As configured when the pool was captured. The DDOP can change with the machine's configuration.
+    validations:
+      required: false
+  - type: input
+    id: software
+    attributes:
+      label: Machine software or firmware version
+      description: Shown in the DDOP too, but the label on the ECU is helpful.
+    validations:
+      required: false
+  - type: textarea
+    id: attachment
+    attributes:
+      label: DDOP file
+      description: |
+        Drag the file here. A `.zip` with several pools is fine. The file may have any name or none
+        (some are just called `en` or `hu`); it is recognised by its content.
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything unusual
+      description: Language of the terminal, how the machine behaves with section control, whether this is a newer capture of a machine already in the collection.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirm
+      options:
+        - label: The file is a DDOP only. It contains no field data, task data or logs.
+          required: true
+        - label: I am allowed to share it and I am fine with it being published in this collection.
+          required: true

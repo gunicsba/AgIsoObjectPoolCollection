@@ -1,0 +1,67 @@
+name: Submit an IOP
+description: Suggest a VT object pool (.iop) for the collection
+title: "IOP: <name>"
+labels: ["iop", "submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The collection records where each `.iop` came from (repository, path, commit) in
+        `iop/SOURCES.md`. Point to the source repository if there is one: that is preferred over
+        attaching a file, because the *Import IOPs* workflow copies from a repository at a known commit.
+  - type: input
+    id: repo
+    attributes:
+      label: Source repository
+      description: owner/name on GitHub, for example `Open-Agriculture/AgIsoStack-plus-plus`.
+    validations:
+      required: false
+  - type: input
+    id: ref
+    attributes:
+      label: Branch, tag or commit
+      description: Leave empty for the default branch.
+    validations:
+      required: false
+  - type: input
+    id: paths
+    attributes:
+      label: Path or glob of the .iop files
+      description: For example `examples/**/*.iop`.
+    validations:
+      required: false
+  - type: dropdown
+    id: licence
+    attributes:
+      label: Licence of the source, if you know it
+      description: For information only; it is recorded but does not decide whether the file is added.
+      options:
+        - None known
+        - MIT
+        - Apache-2.0
+        - BSD
+        - GPL or other copyleft
+        - Other (say more below)
+    validations:
+      required: false
+  - type: textarea
+    id: attachment
+    attributes:
+      label: Attached file (only if there is no repository)
+      description: Drag the `.iop` here (or a `.zip`), and say below where it comes from.
+    validations:
+      required: false
+  - type: textarea
+    id: notes
+    attributes:
+      label: What it is
+      description: What the pool shows or is used for, VT version, and anything a maintainer should know.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirm
+      options:
+        - label: The pool contains no customer data, and I am allowed to share it.
+          required: true
