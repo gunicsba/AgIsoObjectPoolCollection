@@ -42,6 +42,9 @@ concurrency:
 
 jobs:
   import:
+    # Disabled: this still writes the old iop/<type>/ layout. VT pools now live in pools/<manufacturer>/<slug>/;
+    # re-enable once the importer writes that layout.
+    if: false
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions:

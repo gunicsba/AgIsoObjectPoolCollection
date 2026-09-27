@@ -1,0 +1,19 @@
+id: "a4b54f27"
+name: TODO
+manufacturer: Väderstad
+manufacturer_code: 581
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #108, captured by AgIsoVirtualTerminal (iso_data).
+  Formerly iop/unsorted/MFG581_VT_a4b54f27.iop.
+  pool.iop is parts/ joined in order:
+    part00.iop: https://github.com/user-attachments/files/20804597/a008840048a00000.zip!a008840048a00000/object_pool_0.iop
+    part01.iop: https://github.com/user-attachments/files/20804597/a008840048a00000.zip!a008840048a00000/object_pool_1.iop
+public: false
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/108

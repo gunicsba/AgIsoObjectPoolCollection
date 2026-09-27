@@ -1,0 +1,20 @@
+id: "7301e2a8"
+name: TODO
+manufacturer: Hardi International
+manufacturer_code: 357
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #149, captured by AgIsoVirtualTerminal (iso_data).
+  Formerly iop/unsorted/MFG357_VT_7301e2a8.iop.
+  pool.iop is parts/ joined in order:
+    part00.iop: https://github.com/user-attachments/files/23767128/Open-Agriculture.1.zip!Open-Agriculture/iso_data/a00c80002ca00000/object_pool_0.iop
+    part01.iop: https://github.com/user-attachments/files/23767128/Open-Agriculture.1.zip!Open-Agriculture/iso_data/a00c80002ca00000/object_pool_1.iop
+    part02.iop: https://github.com/user-attachments/files/23767128/Open-Agriculture.1.zip!Open-Agriculture/iso_data/a00c80002ca00000/object_pool_2.iop
+public: false
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/149

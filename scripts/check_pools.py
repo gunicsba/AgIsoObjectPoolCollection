@@ -216,15 +216,18 @@ def check_iops(root: Path, rep: Report) -> int:
 def run(root: Path) -> Report:
     rep = Report()
     ddop_rows = bm.read_manifest(root / "ddop" / "manifest.csv")
-    iop_rows = bm.read_manifest(root / "iop" / "manifest.csv")
     check_manifest_rows(root, "ddop", ".ddop", ddop_rows, bm.DDOP_COLUMNS, DERIVED_DDOP, bm.ddop_row, rep)
     for r in ddop_rows:
         if r.get("type") not in bm.POOL_TYPES:
             rep.error("ddop/manifest.csv: %s: unknown type %r" % (printable(r.get("file") or ""), r.get("type")))
-    for r in iop_rows:
-        if r.get("type") not in bm.POOL_TYPES:
-            rep.error("iop/manifest.csv: %s: unknown type %r" % (printable(r.get("file") or ""), r.get("type")))
-    check_manifest_rows(root, "iop", ".iop", iop_rows, bm.IOP_COLUMNS, DERIVED_IOP, bm.iop_row, rep)
+    # VT pools moved to pools/ (checked by tools/validate.py). iop/ is only still written by the
+    # disabled IOP importers and their tests.
+    if (root / "iop").is_dir():
+        iop_rows = bm.read_manifest(root / "iop" / "manifest.csv")
+        for r in iop_rows:
+            if r.get("type") not in bm.POOL_TYPES:
+                rep.error("iop/manifest.csv: %s: unknown type %r" % (printable(r.get("file") or ""), r.get("type")))
+        check_manifest_rows(root, "iop", ".iop", iop_rows, bm.IOP_COLUMNS, DERIVED_IOP, bm.iop_row, rep)
     n_ddop = check_ddops(root, rep)
     n_iop = check_iops(root, rep)
     check_stray(root, rep)

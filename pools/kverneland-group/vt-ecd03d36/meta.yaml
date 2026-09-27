@@ -1,0 +1,26 @@
+id: "ecd03d36"
+name: TODO
+manufacturer: Kverneland Group
+manufacturer_code: 89
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #174, captured by AgIsoVirtualTerminal (iso_data).
+  Formerly iop/unsorted/MFG89_VT_ecd03d36.iop.
+  pool.iop is parts/ joined in order:
+    part00.iop: https://github.com/user-attachments/files/28564579/CANLog_3.Jun.2026.6_16_32pm.zip!iso_data/a00a80000b200000/object_pool_0.iop
+    part01.iop: https://github.com/user-attachments/files/28564579/CANLog_3.Jun.2026.6_16_32pm.zip!iso_data/a00a80000b200000/object_pool_1.iop
+    part02.iop: https://github.com/user-attachments/files/28564579/CANLog_3.Jun.2026.6_16_32pm.zip!iso_data/a00a80000b200000/object_pool_2.iop
+    part03.iop: https://github.com/user-attachments/files/28564579/CANLog_3.Jun.2026.6_16_32pm.zip!iso_data/a00a80000b200000/object_pool_3.iop
+    part04.iop: https://github.com/user-attachments/files/28564579/CANLog_3.Jun.2026.6_16_32pm.zip!iso_data/a00a80000b200000/object_pool_4.iop
+    part05.iop: https://github.com/user-attachments/files/28564579/CANLog_3.Jun.2026.6_16_32pm.zip!iso_data/a00a80000b200000/object_pool_5.iop
+    part06.iop: https://github.com/user-attachments/files/28564579/CANLog_3.Jun.2026.6_16_32pm.zip!iso_data/a00a80000b200000/object_pool_6.iop
+    part07.iop: https://github.com/user-attachments/files/28564579/CANLog_3.Jun.2026.6_16_32pm.zip!iso_data/a00a80000b200000/object_pool_7.iop
+    part08.iop: https://github.com/user-attachments/files/28564579/CANLog_3.Jun.2026.6_16_32pm.zip!iso_data/a00a80000b200000/object_pool_8.iop
+public: false
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/174

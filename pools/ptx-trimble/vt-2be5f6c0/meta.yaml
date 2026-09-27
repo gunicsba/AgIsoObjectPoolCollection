@@ -1,0 +1,19 @@
+id: "2be5f6c0"
+name: TODO
+manufacturer: PTx Trimble
+manufacturer_code: 98
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #188, captured by AgIsoVirtualTerminal (iso_data).
+  Formerly iop/unsorted/MFG98_VT_2be5f6c0.iop.
+  pool.iop is parts/ joined in order:
+    part00.iop: https://github.com/user-attachments/files/31611158/iops.danmann.1.zip!a00c80000c400000/object_pool_0.iop
+    part01.iop: https://github.com/user-attachments/files/31611158/iops.danmann.1.zip!a00c80000c400000/object_pool_1.iop
+public: false
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/188

@@ -1,0 +1,16 @@
+id: "40a54052"
+name: BtnInHiddenContainer
+manufacturer: TODO
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #162.
+  Formerly iop/unsorted/AGISOVIRTUALTERMINAL_BtnInHiddenContainer_40a54052.iop.
+  File: https://github.com/user-attachments/files/25228504/BtnInHiddenContainer.iop.zip!BtnInHiddenContainer.iop
+public: false
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/162

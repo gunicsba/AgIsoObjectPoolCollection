@@ -1,0 +1,19 @@
+id: "0cd84f4a"
+name: TODO
+manufacturer: Horsch Maschinen
+manufacturer_code: 442
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #166, captured by AgIsoVirtualTerminal (iso_data).
+  Formerly iop/unsorted/MFG442_VT_0cd84f4a.iop.
+  pool.iop is parts/ joined in order:
+    part00.iop: https://github.com/user-attachments/files/25901302/avatar9m.zip!iso_data/a0002f0837400000/object_pool_0.iop
+    part01.iop: https://github.com/user-attachments/files/25901302/avatar9m.zip!iso_data/a0002f0837400000/object_pool_1.iop
+public: false
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/166

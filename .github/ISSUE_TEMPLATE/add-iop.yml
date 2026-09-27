@@ -6,9 +6,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        The collection records where each `.iop` came from (repository, path, commit) in
-        `iop/SOURCES.md`. Point to the source repository if there is one: that is preferred over
-        attaching a file, because the *Import IOPs* workflow copies from a repository at a known commit.
+        The collection records where each `.iop` came from (repository, path, commit, or issue
+        attachment) in the pool's `meta.yaml`. Point to the source repository if there is one: that is
+        preferred over attaching a file, because it can be copied from a known commit.
   - type: input
     id: repo
     attributes:

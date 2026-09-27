@@ -1,0 +1,20 @@
+id: "cca044d7"
+name: TODO
+manufacturer: John Deere
+manufacturer_code: 33
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #171, captured by AgIsoVirtualTerminal (iso_data).
+  Formerly iop/unsorted/MFG33_VT_cca044d7.iop.
+  pool.iop is parts/ joined in order:
+    part00.iop: https://github.com/user-attachments/files/27430276/AgISOVirtualTerminalLogs_6_May_2026_9_38_05am.zip!iso_data/a00c800004200000/object_pool_234.iop
+    part01.iop: https://github.com/user-attachments/files/27430276/AgISOVirtualTerminalLogs_6_May_2026_9_38_05am.zip!iso_data/a00c800004200000/object_pool_235.iop
+    part02.iop: https://github.com/user-attachments/files/27430276/AgISOVirtualTerminalLogs_6_May_2026_9_38_05am.zip!iso_data/a00c800004200000/object_pool_236.iop
+public: false
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/171
