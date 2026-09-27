@@ -1,0 +1,16 @@
+id: "e9b1311e"
+name: debug
+manufacturer: TODO
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #139.
+  Formerly iop/unsorted/AGISOVIRTUALTERMINAL_debug.iop.
+  File: https://github.com/user-attachments/files/22856311/debug.zip!debug.iop
+public: false
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/139

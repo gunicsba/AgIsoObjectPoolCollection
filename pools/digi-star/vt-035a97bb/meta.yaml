@@ -1,0 +1,17 @@
+id: "035a97bb"
+name: TODO
+manufacturer: Digi-Star
+manufacturer_code: 365
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #112, captured by AgIsoVirtualTerminal (iso_data).
+  Formerly iop/unsorted/MFG365_VT_035a97bb.iop.
+  File: https://github.com/user-attachments/files/21220989/a02200002da00000.zip!a02200002da00000/object_pool_0.iop
+public: false
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/112

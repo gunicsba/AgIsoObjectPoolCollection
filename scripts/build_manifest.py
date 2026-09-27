@@ -95,6 +95,8 @@ def build(root: Path) -> dict[Path, str]:
     for sub, suffix, columns, make_row in (
             ("ddop", ".ddop", DDOP_COLUMNS, ddop_row), ("iop", ".iop", IOP_COLUMNS, iop_row)):
         directory = root / sub
+        if sub == "iop" and not directory.is_dir():
+            continue  # VT pools moved to pools/
         manifest = directory / "manifest.csv"
         kept = {r["file"]: r for r in read_manifest(manifest)}
         rows = []

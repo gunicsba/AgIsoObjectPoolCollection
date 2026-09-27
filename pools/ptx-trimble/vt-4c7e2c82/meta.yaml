@@ -1,0 +1,24 @@
+id: "4c7e2c82"
+name: TODO
+manufacturer: PTx Trimble
+manufacturer_code: 98
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #26, captured by AgIsoVirtualTerminal (iso_data).
+  Formerly iop/unsorted/MFG98_VT_4c7e2c82.iop.
+  pool.iop is parts/ joined in order:
+    part00.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_7.iop
+    part01.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_8.iop
+    part02.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_9.iop
+    part03.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_10.iop
+    part04.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_11.iop
+    part05.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_12.iop
+    part06.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_13.iop
+public: false
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/26

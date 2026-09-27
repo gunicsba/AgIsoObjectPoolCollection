@@ -5,8 +5,9 @@ Real ISOBUS object pools, kept as test and reference data for anything that has 
 - **DDOP** (`ddop/`): device descriptor object pools, the machine description an implement sends to a
   task controller. They come from machines that were connected to a task controller and were shared
   in issues.
-- **IOP** (`iop/`): virtual terminal (VT) object pools, the user interface an implement shows on the
-  terminal. They are copied from repositories and each one is traced to its source.
+- **VT pools** (`pools/`): virtual terminal object pools (`.iop`), the user interface an implement
+  shows on the terminal, for testing VT implementations. Each one sits in its own folder with a
+  `meta.yaml` that records where it came from.
 
 Any project can use the files. Known consumers: the
 [AOG-TaskController](https://github.com/AgOpenGPS-Official/AOG-TaskController) tests, and the AgIsoDDOPGenerator.
@@ -17,17 +18,19 @@ Any project can use the files. Known consumers: the
 ddop/
   manifest.csv            index of every pool, one row per file
   <type>/<BRAND>_<MODEL>[_variant].ddop
-iop/
-  manifest.csv            index of every file
-  SOURCES.md              where each file came from (commit SHA or issue), plus the source's licence
-  LICENSES/               licence text of each source repository that has one
-  <type>/<BRAND>_<MODEL>[_variant].iop
-  <type>/<BRAND>_<MODEL>/<BRAND>_<MODEL>_partNN.iop     only for a pool that came in several files
+pools/
+  <manufacturer>/<slug>/
+    pool.iop              the whole pool
+    meta.yaml             metadata, see below
+    parts/partNN.iop      only for a pool that came in several files
+    reference/            optional photos and screenshots from commercial VTs
+schema/meta.schema.json   JSON Schema for meta.yaml
+tools/validate.py         checks pools/ (what the Validate VT pools workflow runs)
 incoming/                 exists only on import pull requests: scrubbed candidates + REPORT.md
-scripts/                  Python 3.12, standard library only
+scripts/                  DDOP tooling, Python 3.12, standard library only
 ```
 
-`ddop/<type>` and `iop/<type>` use the same folders:
+The `ddop/<type>` folders:
 
 | Folder | Contents |
 |---|---|
@@ -48,9 +51,6 @@ scripts/                  Python 3.12, standard library only
   contain control characters.
 - The variant says what tells two pools of the same machine apart: section count (`_12sec`), boom
   count (`_2booms`), section control method (`_DDI290`), language (`_hu`), `_minimal`.
-- `.iop` files follow the same scheme. The importer builds `MODEL` from the file's path in the source
-  repository (characters outside `A-Z a-z 0-9` become `_`) and `BRAND` from the repository name, or from
-  `--brand`. The original path is kept in `iop/SOURCES.md`; there are no per-repository folders.
 
 ## manifest.csv
 
@@ -83,24 +83,50 @@ scripts/                  Python 3.12, standard library only
 
 The DDIs looked at are 134 and 135 (section offset X and Y) and 67, 68 and 70 (working width).
 
-`iop/manifest.csv` has `file`, `type`, `bytes`, `sha256`, `parts` and `note`. `parts` is the number of
-parts for a merged pool, `part` for a file inside a parts folder, and `-` for a single file.
+## VT pools
 
-### Pools that come in several files
+### Folders
+
+`pools/<manufacturer>/<slug>/`. `manufacturer` is the name from the
+[AgIsoVirtualTerminal manufacturer map](https://github.com/Open-Agriculture/AgIsoVirtualTerminal/blob/main/include/ManufacturerMap.hpp)
+for the manufacturer code in the working-set NAME, in lower case with hyphens (`ptx-trimble`,
+`vaderstad`), or `unknown`. The code identifies who made the ECU, which is not always the machine
+brand. `slug` is free, lower case letters, digits and hyphens; pools imported without a known machine
+are `vt-<id>`. Rename or move a folder whenever you learn more: the `id` in `meta.yaml` stays.
 
 An implement can upload one pool as several numbered files (`object_pool_0.iop`, `object_pool_1.iop`, ...).
-Such a pool is stored twice: the parts in `iop/<type>/<stem>/<stem>_partNN.iop`, and the whole pool as
-`iop/<type>/<stem>.iop` in the main folder, which is the parts concatenated in part order. Consumers
-just read the main-folder files. `scripts/check_pools.py` fails if a merged file is not exactly its parts
-joined, if part numbers have gaps, or if the merged file is missing. Concatenation is not validated as
-a VT pool by these scripts (see *IOP validation* below).
+Then `parts/` keeps them as `part00.iop`, `part01.iop`, ... and `pool.iop` is their concatenation in
+part order. Consumers read `pool.iop`. Concatenation is not validated as a VT pool.
 
-## IOP validation
+`reference/` holds photos or screenshots of the pool on commercial VTs, named
+`<object-id>_<terminal>.jpg` or `.png`: the decimal id of the object shown (usually a data mask) and the
+terminal in lower case with hyphens, for example `1000_john-deere-g5.jpg`.
 
-Nothing here parses VT object pools: the scripts only check names, manifests, provenance, and that a
-merged pool is its parts joined. The AOG-TaskController repository has an `iop_validator` (C++, built on
-the AgIsoStack++ parser) that does parse them. It is not part of this repository yet; real machine pools
-often fail its strict checks, so it would be a report, not a gate, apart from "does not parse".
+### meta.yaml
+
+Checked against [`schema/meta.schema.json`](schema/meta.schema.json). Unknown values are the string
+`TODO`, not left out.
+
+| Field | Meaning |
+|---|---|
+| `id` | Stable id: the first 8 hex digits of the sha256 of `pool.iop` when the pool was added. Never changes afterwards, not on rename, move, or a fix to `pool.iop`. Quote it (`id: "0cd84f4a"`), or YAML may read it as a number |
+| `name` | Machine or pool name |
+| `manufacturer` | Manufacturer name, as in the manufacturer map |
+| `manufacturer_code` | Optional. ISOBUS manufacturer code from the working-set NAME |
+| `vt_version` | VT version the pool targets, 2 to 6, or `TODO` |
+| `source` | Free text: how and where it was captured (issue, attachment, path inside the zip, VT used) |
+| `public` | `true` only once someone has confirmed the pool may be shown in a public gallery. Default `false` |
+| `render` | `data_mask_size`, `softkey_count`, `softkey_width`, `softkey_height`: the terminal settings to render with, in pixels |
+| `known_issues` | URLs of issues about this pool |
+
+### Validation
+
+`pip install -r tools/requirements.txt`, then `python tools/validate.py`. It fails when a pool folder
+lacks `pool.iop` or `meta.yaml`, `meta.yaml` does not match the schema, two pools share an `id`, a
+`reference/` file is misnamed, `pool.iop` is not its `parts/` joined, or `meta.yaml` holds a working-set
+NAME with a non-zero identity number. It does not parse the pools. The AOG-TaskController repository
+has an `iop_validator` (C++, built on the AgIsoStack++ parser) that does; real machine pools often
+fail its strict checks, so it would be a report, not a gate.
 
 ## Privacy: pools are scrubbed
 
@@ -134,36 +160,39 @@ request with the new ones in `incoming/` and a `REPORT.md`. It never commits to 
 
 For an import pull request, do steps 2 to 4 with the files from `incoming/`, then delete `incoming/`.
 
-**IOP from issue attachments.** The *Import IOPs from issues* workflow (default source
-`Open-Agriculture/AgIsoVirtualTerminal`) reads issues and comments, downloads the attachments, looks
-inside zips for `.iop` files, groups the numbered files of a multi-file pool (a new pool starts at every
-file whose first object is a Working Set), and opens a pull request adding them under
-`iop/<type>/`. Names are provisional: `MFG<manufacturer code>_VT_<hash>`. The working-set NAME in
-source paths contains the machine's identity number, so it is zeroed in everything recorded, and
-`check_pools.py` fails if an unmasked NAME appears in `iop/SOURCES.md`. Object pools can hold text typed
-in on the terminal, so read a pool before keeping it.
+**VT pool.**
 
-**IOP from a repository.** Open a *Submit an IOP* issue naming the source repository, or run the *Import IOPs* workflow
-(source repository, ref, path glob, optional type and brand; default `Open-Agriculture/AgIsoStack-plus-plus`,
-`examples/**/*.iop`, type `unsorted`). It copies the files into `iop/<type>/`, updates `iop/SOURCES.md`
-and `iop/manifest.csv` and opens a pull request. The source repository's licence is written down
-(`iop/SOURCES.md`, and its text in `iop/LICENSES/`) but never checked or enforced: pools rarely have a
-licence of their own.
+1. Compute the id: the first 8 hex digits of `sha256sum pool.iop`.
+2. Create `pools/<manufacturer>/<slug>/` and copy the pool in as `pool.iop`, unchanged. A pool that
+   came in several files: the numbered files go to `parts/part00.iop`, `part01.iop`, ... in upload
+   order, and `pool.iop` is them joined (`cat parts/part*.iop > pool.iop`).
+3. Write `meta.yaml`; copy one from another pool and change every field. Leave `public: false`.
+   Use `TODO` for what you do not know.
+4. Optionally add screenshots to `reference/`.
+5. `python tools/validate.py`.
+
+A working-set NAME (16 hex digits, often a folder name in AgIsoVirtualTerminal's `iso_data`) holds the
+machine's identity number: zero its last 21 bits before writing it in `meta.yaml` (`a00c80000c412345`
+becomes `a00c80000c400000`). Object pools can hold text typed in on the terminal (owner names, phone
+numbers), so read a pool before adding it.
+
+The *Import IOPs* and *Import IOPs from issues* workflows and their scripts still write the old
+`iop/<type>/` layout and are disabled until they are updated.
 
 ## Scripts
 
-Python 3.12, standard library only. On Windows set `PYTHONUTF8=1` (the default code page cannot read
+The DDOP scripts in `scripts/`: Python 3.12, standard library only. On Windows set `PYTHONUTF8=1` (the default code page cannot read
 issue JSON).
 
 | Script | Purpose |
 |---|---|
 | `poollib.py` | Shared code: DDOP parser, scrub, summary, content hash |
 | `build_manifest.py` | Rebuild the manifests (`--check` only reports) |
-| `check_pools.py` | What CI runs: manifests match the files, every DDOP parses and is scrubbed, names are well formed |
+| `check_pools.py` | What the Check pools workflow runs: manifests match the files, every DDOP parses and is scrubbed, names are well formed |
 | `scrub_pool.py` | Scrub one pool before sharing it |
 | `import_ddops.py` | Stage new DDOPs from issue attachments in `incoming/` |
-| `import_iops.py` | Copy `.iop` files from a source repository |
-| `import_iops_from_issues.py` | Add `.iop` files found in issue attachments, merging multi-file pools |
+| `import_iops.py` | Copy `.iop` files from a source repository (old `iop/` layout, workflow disabled) |
+| `import_iops_from_issues.py` | Add `.iop` files found in issue attachments (old `iop/` layout, workflow disabled) |
 | `attachments.py` | Shared by the issue importers: issues, downloads, zips, NAME masking |
 | `open_pr.sh` | Used by the workflows: commit to a new branch and open a pull request |
 
@@ -176,7 +205,14 @@ pull request checks.
 
 ## Licence
 
-This repository (the scripts, workflows, manifests and documentation) is under the
-[WTFPL](LICENSE). The licence of this repository is unrelated to that of the pools in it. For `iop/`,
-`iop/SOURCES.md` says what each source repository declares; the DDOPs were contributed by machine owners
-and their status still needs to be decided.
+This repository (the scripts, schema, workflows, manifests and documentation) is under the
+[WTFPL](LICENSE). That licence does not cover the pools or the reference images.
+
+A VT object pool is the manufacturer's work: its layout, text and bitmaps belong to whoever made the
+implement software, and none of the pools here came with a licence. They are kept to test VT
+implementations. Do not redistribute them beyond that, and do not show them publicly unless `public`
+is `true`, which needs someone to have confirmed it. The same goes for photos and screenshots in
+`reference/`, which may also show a commercial terminal's own interface. `source` in `meta.yaml` says
+where each pool came from.
+
+The DDOPs were contributed by machine owners and their status still needs to be decided.

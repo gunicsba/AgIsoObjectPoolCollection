@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/gunicsba/AgIsoObjectPoolCollection/schema/meta.schema.json",
+  "title": "VT object pool metadata (pools/<manufacturer>/<slug>/meta.yaml)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "name", "manufacturer", "vt_version", "source", "public", "render", "known_issues"],
+  "properties": {
+    "id": {
+      "description": "Stable id: the first 8 hex digits of the sha256 of pool.iop when the pool was added. Never changes, not on rename, move or a later fix of pool.iop. Quote it in YAML.",
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}$"
+    },
+    "name": {
+      "description": "Human readable name of the machine or pool.",
+      "type": "string",
+      "minLength": 1
+    },
+    "manufacturer": {
+      "description": "Manufacturer name, as in the AgIsoVirtualTerminal ManufacturerMap for manufacturer_code.",
+      "type": "string",
+      "minLength": 1
+    },
+    "manufacturer_code": {
+      "description": "ISOBUS manufacturer code from the working-set NAME. It names the maker of the ECU, which is not always the machine brand.",
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2047
+    },
+    "vt_version": {
+      "description": "VT version the pool targets.",
+      "oneOf": [
+        {"type": "integer", "minimum": 2, "maximum": 6},
+        {"$ref": "#/$defs/todo"}
+      ]
+    },
+    "source": {
+      "description": "Free text: how and where the pool was captured.",
+      "type": "string",
+      "minLength": 1
+    },
+    "public": {
+      "description": "Whether the pool may be shown in a public gallery. false unless someone has confirmed it may.",
+      "type": "boolean"
+    },
+    "render": {
+      "description": "Terminal settings to render the pool with, in pixels.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["data_mask_size", "softkey_count", "softkey_width", "softkey_height"],
+      "properties": {
+        "data_mask_size": {"$ref": "#/$defs/positive_or_todo"},
+        "softkey_count": {"$ref": "#/$defs/positive_or_todo"},
+        "softkey_width": {"$ref": "#/$defs/positive_or_todo"},
+        "softkey_height": {"$ref": "#/$defs/positive_or_todo"}
+      }
+    },
+    "known_issues": {
+      "description": "URLs of issues about this pool.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^https://"}
+    }
+  },
+  "$defs": {
+    "todo": {"const": "TODO"},
+    "positive_or_todo": {
+      "oneOf": [
+        {"type": "integer", "minimum": 1},
+        {"$ref": "#/$defs/todo"}
+      ]
+    }
+  }
+}

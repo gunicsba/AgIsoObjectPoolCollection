@@ -1,0 +1,17 @@
+id: "7d9e96b7"
+name: TODO
+manufacturer: Open-Agriculture
+manufacturer_code: 1407
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #188, captured by AgIsoVirtualTerminal (iso_data).
+  Formerly iop/unsorted/MFG1407_VT_7d9e96b7.iop.
+  File: https://github.com/user-attachments/files/30232607/iso_data.zip!iso_data/a0088000afe00000/object_pool_0.iop
+public: false
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/188

@@ -1,0 +1,26 @@
+id: "fe08e7ab"
+name: TODO
+manufacturer: PTx Trimble
+manufacturer_code: 98
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #26, captured by AgIsoVirtualTerminal (iso_data).
+  Formerly iop/unsorted/MFG98_VT_fe08e7ab.iop.
+  pool.iop is parts/ joined in order:
+    part00.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_39.iop
+    part01.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_40.iop
+    part02.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_41.iop
+    part03.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_42.iop
+    part04.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_43.iop
+    part05.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_44.iop
+    part06.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_45.iop
+    part07.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_46.iop
+    part08.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_47.iop
+public: false
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/26
