@@ -18,7 +18,7 @@ source: |
     part08.iop: https://github.com/user-attachments/files/28849219/iso_data-20260611T173250Z-3-001.zip!iso_data/a00880003fe00000/object_pool_10.iop
     part09.iop: https://github.com/user-attachments/files/28849219/iso_data-20260611T173250Z-3-001.zip!iso_data/a00880003fe00000/object_pool_11.iop
     part10.iop: https://github.com/user-attachments/files/28849219/iso_data-20260611T173250Z-3-001.zip!iso_data/a00880003fe00000/object_pool_12.iop
-public: false
+public: true
 render:
   data_mask_size: TODO
   softkey_count: TODO

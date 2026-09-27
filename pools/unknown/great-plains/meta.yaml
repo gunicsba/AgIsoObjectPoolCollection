@@ -6,7 +6,7 @@ source: |
   Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #157.
   Formerly iop/unsorted/AGISOVIRTUALTERMINAL_great_plains.iop.
   File: https://github.com/user-attachments/files/24411217/great_plains.iop.zip!great_plains.iop
-public: false
+public: true
 render:
   data_mask_size: TODO
   softkey_count: TODO

@@ -6,7 +6,7 @@ source: |
   Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #139.
   Formerly iop/unsorted/AGISOVIRTUALTERMINAL_debug.iop.
   File: https://github.com/user-attachments/files/22856311/debug.zip!debug.iop
-public: false
+public: true
 render:
   data_mask_size: TODO
   softkey_count: TODO

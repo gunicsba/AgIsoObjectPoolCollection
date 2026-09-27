@@ -16,7 +16,7 @@ source: |
     part06.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_45.iop
     part07.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_46.iop
     part08.iop: https://github.com/user-attachments/files/17322198/a00c80000c400000.zip!a00c80000c400000/object_pool_47.iop
-public: false
+public: true
 render:
   data_mask_size: TODO
   softkey_count: TODO

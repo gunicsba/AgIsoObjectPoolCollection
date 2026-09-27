@@ -10,7 +10,7 @@ source: |
     part00.iop: https://github.com/user-attachments/files/23767128/Open-Agriculture.1.zip!Open-Agriculture/iso_data/a00c80002ca00000/object_pool_0.iop
     part01.iop: https://github.com/user-attachments/files/23767128/Open-Agriculture.1.zip!Open-Agriculture/iso_data/a00c80002ca00000/object_pool_1.iop
     part02.iop: https://github.com/user-attachments/files/23767128/Open-Agriculture.1.zip!Open-Agriculture/iso_data/a00c80002ca00000/object_pool_2.iop
-public: false
+public: true
 render:
   data_mask_size: TODO
   softkey_count: TODO

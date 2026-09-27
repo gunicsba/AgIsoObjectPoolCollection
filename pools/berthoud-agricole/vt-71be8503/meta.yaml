@@ -9,7 +9,7 @@ source: |
   pool.iop is parts/ joined in order:
     part00.iop: https://github.com/user-attachments/files/18630204/AgISOVirtualTerminalLogs_1_Feb_2025_11_13_21am_BERTHOUD_ECTRONIC.zip!a00c80005b400000/object_pool_0.iop
     part01.iop: https://github.com/user-attachments/files/18630204/AgISOVirtualTerminalLogs_1_Feb_2025_11_13_21am_BERTHOUD_ECTRONIC.zip!a00c80005b400000/object_pool_1.iop
-public: false
+public: true
 render:
   data_mask_size: TODO
   softkey_count: TODO

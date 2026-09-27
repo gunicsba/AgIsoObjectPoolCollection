@@ -7,7 +7,7 @@ source: |
   Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #172, captured by AgIsoVirtualTerminal (iso_data).
   Formerly iop/unsorted/MFG98_VT_0ce3618f.iop.
   File: https://github.com/user-attachments/files/28058396/isobs.logs.zip!Open-Agriculture/iso_data/a10c80000c400000/object_pool_0.iop
-public: false
+public: true
 render:
   data_mask_size: TODO
   softkey_count: TODO

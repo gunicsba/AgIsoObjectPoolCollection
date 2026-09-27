@@ -6,7 +6,7 @@ source: |
   Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #161.
   Formerly iop/unsorted/AGISOVIRTUALTERMINAL_BtnInHiddenContainer.iop.
   File: https://github.com/user-attachments/files/25186891/BtnInHiddenContainer.iop.zip!BtnInHiddenContainer.iop
-public: false
+public: true
 render:
   data_mask_size: TODO
   softkey_count: TODO

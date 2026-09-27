@@ -13,7 +13,7 @@ source: |
     part03.iop: https://github.com/user-attachments/files/28564579/CANLog_3.Jun.2026.6_16_32pm.zip!iso_data/a00884000c400000/object_pool_3.iop
     part04.iop: https://github.com/user-attachments/files/28564579/CANLog_3.Jun.2026.6_16_32pm.zip!iso_data/a00884000c400000/object_pool_4.iop
     part05.iop: https://github.com/user-attachments/files/28564579/CANLog_3.Jun.2026.6_16_32pm.zip!iso_data/a00884000c400000/object_pool_5.iop
-public: false
+public: true
 render:
   data_mask_size: TODO
   softkey_count: TODO
