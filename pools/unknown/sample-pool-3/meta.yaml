@@ -1,0 +1,17 @@
+id: "c99438bd"
+name: samplePool3
+manufacturer: TODO
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #233, a test pool for line art (dashed lines).
+  File: https://github.com/user-attachments/files/32919210/samplePool3.iop.zip!samplePool3.iop
+  Reference screenshots of data mask 1009 on an NX9 and a Solsteer View-T are from the same comment:
+  https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/233#issuecomment-5933680597
+public: true
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/233
