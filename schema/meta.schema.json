@@ -49,10 +49,18 @@
       "additionalProperties": false,
       "required": ["data_mask_size", "softkey_count", "softkey_width", "softkey_height"],
       "properties": {
-        "data_mask_size": {"$ref": "#/$defs/positive_or_todo"},
-        "softkey_count": {"$ref": "#/$defs/positive_or_todo"},
-        "softkey_width": {"$ref": "#/$defs/positive_or_todo"},
-        "softkey_height": {"$ref": "#/$defs/positive_or_todo"}
+        "data_mask_size": {"$ref": "#/$defs/positive_or_todo", "maximum": 2048},
+        "softkey_count": {
+          "description": "The most soft keys a soft key mask holds.",
+          "$ref": "#/$defs/positive_or_todo",
+          "maximum": 64
+        },
+        "softkey_width": {
+          "description": "The VT reports the soft key size in one byte.",
+          "$ref": "#/$defs/positive_or_todo",
+          "maximum": 255
+        },
+        "softkey_height": {"$ref": "#/$defs/positive_or_todo", "maximum": 255}
       }
     },
     "known_issues": {

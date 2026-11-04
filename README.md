@@ -116,7 +116,7 @@ Checked against [`schema/meta.schema.json`](schema/meta.schema.json). Unknown va
 | `vt_version` | VT version the pool targets, 2 to 6, or `TODO` |
 | `source` | Free text: how and where it was captured (issue, attachment, path inside the zip, VT used) |
 | `public` | `true` only once someone has confirmed the pool may be shown in a public gallery. Default `false` |
-| `render` | `data_mask_size`, `softkey_count`, `softkey_width`, `softkey_height`: the terminal settings to render with, in pixels |
+| `render` | `data_mask_size` (at most 2048), `softkey_count` (at most 64), `softkey_width` and `softkey_height` (at most 255): the terminal settings to render with, in pixels, or `TODO` |
 | `known_issues` | URLs of issues about this pool |
 
 ### Validation
