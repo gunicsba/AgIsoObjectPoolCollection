@@ -1,0 +1,15 @@
+id: "3c826671"
+name: Output Rectangle line suppression
+manufacturer: Open-Agriculture
+vt_version: 3
+source: |
+  Hand-made by tools/make_test_pools.py, for vt-render before/after comparisons.
+  Every line suppression value, with a solid line and with line art.
+public: true
+render:
+  data_mask_size: 480
+  softkey_count: 12
+  softkey_width: 60
+  softkey_height: 60
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/310

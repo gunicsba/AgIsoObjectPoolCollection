@@ -26,6 +26,7 @@ pools/
     reference/            optional photos and screenshots from commercial VTs
 schema/meta.schema.json   JSON Schema for meta.yaml
 tools/validate.py         checks pools/ (what the Validate VT pools workflow runs)
+tools/make_test_pools.py  writes the hand-made test pools, pools/open-agriculture/test-*
 incoming/                 exists only on import pull requests: scrubbed candidates + REPORT.md
 scripts/                  DDOP tooling, Python 3.12, standard library only
 ```
