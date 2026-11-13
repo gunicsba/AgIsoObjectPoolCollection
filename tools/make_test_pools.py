@@ -97,11 +97,52 @@ def output_number_rounding():
     return pool(children, objects)
 
 
+def output_string(object_id, width, height, text, font=100):
+    """A transparent Output String with the text."""
+    return (u16(object_id) + u8(11) + u16(width) + u16(height) + u8(1) + u16(font) + u8(1) + u16(0xFFFF) + u8(0) +
+            u16(len(text)) + text.encode("latin-1") + u8(0))
+
+
+def focus_frame():
+    """Input fields that look like plain text, as old pools draw them, a Button and a soft key.
+
+    Render it with vt-render --focus <id> to see the focus frame on one of them:
+    4001 Input Number, 4002 Input String, 4003 Input List, 4004 Input Boolean, 4005 Button, 5001 Key.
+    """
+    objects = [
+        u16(100) + u8(23) + u8(0) + u8(4) + u8(0) + u8(0) + u8(0),  # Font attributes: black 12x16
+        u16(4001) + u8(9) + u16(180) + u16(24) + u8(1) + u16(100) + u8(1) + u16(0xFFFF) + u32(1250) + u32(0) +
+        u32(100000) + i32(0) + f32(0.01) + u8(2) + u8(0) + u8(0) + u8(1) + u8(0),
+        u16(4002) + u8(8) + u16(180) + u16(24) + u8(1) + u16(100) + u16(0xFFFF) + u8(1) + u16(0xFFFF) + u8(0) +
+        u8(10) + b"Field 12  " + u8(1) + u8(0),
+        u16(4003) + u8(10) + u16(180) + u16(24) + u16(0xFFFF) + u8(0) + u8(2) + u8(1) + u8(0) + u16(4101) + u16(4102),
+        output_string(4101, 180, 24, "Select one"),
+        output_string(4102, 180, 24, "Seeder"),
+        u16(4004) + u8(7) + u8(1) + u16(24) + u16(100) + u16(0xFFFF) + u8(1) + u8(1) + u8(0),
+        u16(4005) + u8(6) + u16(120) + u16(40) + u8(7) + u8(0) + u8(1) + u8(0) + u8(1) + u8(0) + u16(4105) + i16(10) + i16(8),
+        output_string(4105, 100, 24, "Start"),
+        u16(2000) + u8(4) + u8(7) + u8(1) + u8(0) + u16(5001),  # Soft Key Mask with one Key
+        u16(5001) + u8(5) + u8(7) + u8(2) + u8(1) + u8(0) + u16(5101) + i16(4) + i16(18),
+        output_string(5101, 52, 24, "Next"),
+    ]
+    labels = ["Number", "String", "List", "Boolean"]
+    children = []
+    for row, label in enumerate(labels):
+        objects.append(output_string(4201 + row, 120, 24, label + ":"))
+        children.append(u16(4201 + row) + i16(20) + i16(30 + row * 50))
+        children.append(u16(4001 + row) + i16(160) + i16(30 + row * 50))
+    children.append(u16(4005) + i16(160) + i16(240))
+    working_set = u16(0) + u8(0) + u8(1) + u8(1) + u16(1000) + u8(0) + u8(0) + u8(0)
+    data_mask = u16(1000) + u8(1) + u8(1) + u16(2000) + u8(len(children)) + u8(0) + b"".join(children)
+    return working_set + data_mask + b"".join(objects)
+
+
 def main():
     pools = {
         "test-rectangle-line-suppression": rectangle_line_suppression(),
         "test-output-meter": output_meter(),
         "test-output-number-rounding": output_number_rounding(),
+        "test-focus-frame": focus_frame(),
     }
     for slug, data in pools.items():
         folder = ROOT / slug
