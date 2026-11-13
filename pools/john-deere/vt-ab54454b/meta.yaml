@@ -1,0 +1,17 @@
+id: "ab54454b"
+name: Seeder/planter master controller
+manufacturer: John Deere
+manufacturer_code: 33
+vt_version: TODO
+source: |
+  Attachment to Open-Agriculture/AgIsoVirtualTerminal issue #121, captured by AgIsoVirtualTerminal (iso_data).
+  pool.iop is object_pool_0.iop from the issue's object pool attachment.
+  Data Mask 1026 is the "Select Model" prompt; its "Select One." field is Input List 10106.
+public: true
+render:
+  data_mask_size: TODO
+  softkey_count: TODO
+  softkey_width: TODO
+  softkey_height: TODO
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/121

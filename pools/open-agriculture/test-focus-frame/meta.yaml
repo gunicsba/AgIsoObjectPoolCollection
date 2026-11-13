@@ -1,0 +1,17 @@
+id: "08ff76ce"
+name: Focus frame
+manufacturer: Open-Agriculture
+vt_version: 4
+source: |
+  Hand-made by tools/make_test_pools.py, for vt-render before/after comparisons.
+  Input fields drawn like plain text, a Button and a soft key. Render with
+  vt-render --focus <id> to see the focus frame (4001 to 4005, 5001).
+public: true
+render:
+  data_mask_size: 480
+  softkey_count: 12
+  softkey_width: 60
+  softkey_height: 60
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/121
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/issues/188
