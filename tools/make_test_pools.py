@@ -137,12 +137,42 @@ def focus_frame():
     return working_set + data_mask + b"".join(objects)
 
 
+def string_wrap_strike_through():
+    """Crossed out strings, with and without Auto Wrap, in several justifications, next to a plain wrapped one."""
+    three_lines = "This auto wrapped string is crossed out and runs over three lines"
+    five_lines = "This bottom justified string wraps to five lines, but its object is only three lines high, so two lines are clipped"
+    cases = [  # x, y, width, height, font, options, justification, text
+        (10, 10, 220, 20, 100, 0, 0, "Crossed out, one line"),
+        (250, 10, 220, 20, 100, 0, 1, "Crossed out, middle"),
+        (10, 40, 220, 60, 100, 2, 0, three_lines),
+        (250, 40, 220, 60, 102, 2, 0, three_lines),  # Plain, for comparison
+        (10, 110, 220, 60, 100, 2, 5, three_lines),  # Middle, middle
+        (250, 110, 220, 60, 100, 2, 10, three_lines),  # Right, bottom
+        (10, 180, 220, 60, 100, 0, 0, "First line\r\nSecond line\r\nThird line"),
+        (250, 180, 220, 36, 100, 2, 8, five_lines),  # Left, bottom
+        (10, 250, 220, 60, 101, 2, 0, three_lines),  # Crossed out and underlined
+    ]
+    objects = [
+        u16(100) + u8(23) + u8(0) + u8(2) + u8(0) + u8(0x02) + u8(0),  # Font attributes: black 8x12, crossed out
+        u16(101) + u8(23) + u8(0) + u8(2) + u8(0) + u8(0x06) + u8(0),  # Font attributes: black 8x12, crossed out, underlined
+        u16(102) + u8(23) + u8(0) + u8(2) + u8(0) + u8(0) + u8(0),  # Font attributes: black 8x12
+    ]
+    children = []
+    for index, (x, y, width, height, font, options, justification, text) in enumerate(cases):
+        object_id = 6000 + index
+        objects.append(u16(object_id) + u8(11) + u16(width) + u16(height) + u8(7) + u16(font) + u8(options) + u16(0xFFFF) +
+                       u8(justification) + u16(len(text)) + text.encode("latin-1") + u8(0))
+        children.append(u16(object_id) + i16(x) + i16(y))
+    return pool(children, objects)
+
+
 def main():
     pools = {
         "test-rectangle-line-suppression": rectangle_line_suppression(),
         "test-output-meter": output_meter(),
         "test-output-number-rounding": output_number_rounding(),
         "test-focus-frame": focus_frame(),
+        "test-string-wrap-strike-through": string_wrap_strike_through(),
     }
     for slug, data in pools.items():
         folder = ROOT / slug
