@@ -1,0 +1,16 @@
+id: "f8b611cb"
+name: Input list marker
+manufacturer: Open-Agriculture
+vt_version: 4
+source: |
+  Hand-made by tools/make_test_pools.py, for vt-render before/after comparisons.
+  Input Lists with text, black and picture items, enabled and disabled, too narrow or too
+  low for arrows, with right justified text, with no items, and taller than one line.
+public: true
+render:
+  data_mask_size: 480
+  softkey_count: 12
+  softkey_width: 60
+  softkey_height: 60
+known_issues:
+  - https://github.com/Open-Agriculture/AgIsoVirtualTerminal/pull/342
