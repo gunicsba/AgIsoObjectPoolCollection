@@ -166,6 +166,88 @@ def string_wrap_strike_through():
     return pool(children, objects)
 
 
+def label(object_id, width, height, text, font=100, background=1, options=1, justification=0):
+    """An Output String, transparent unless the options say otherwise."""
+    return (u16(object_id) + u8(11) + u16(width) + u16(height) + u8(background) + u16(font) + u8(options) + u16(0xFFFF) +
+            u8(justification) + u16(len(text)) + text.encode("latin-1") + u8(0))
+
+
+def button_border():
+    """Buttons with every border option, latched and released, and borders in the face or mask colour."""
+    cases = [  # background, border, options, font, text
+        (7, 0, 0x00, 100, "Silver, black"),
+        (7, 7, 0x00, 100, "Border = face"),
+        (1, 1, 0x00, 100, "White on white"),
+        (15, 15, 0x00, 101, "Navy, navy"),
+        (7, 0, 0x03, 100, "Latched"),
+        (15, 15, 0x03, 101, "Navy latched"),
+        (7, 0, 0x01, 100, "Latchable, off"),
+        (7, 0, 0x20, 100, "No border"),
+        (7, 0, 0x04, 100, "Suppress border"),
+        (7, 0, 0x10, 100, "Disabled"),
+        (7, 0, 0x08, 100, "Transparent"),
+    ]
+    objects = [
+        u16(100) + u8(23) + u8(0) + u8(2) + u8(0) + u8(0) + u8(0),  # Font attributes: black 8x12
+        u16(101) + u8(23) + u8(1) + u8(2) + u8(0) + u8(0) + u8(0),  # Font attributes: white 8x12
+    ]
+    children = []
+    for index, (background, border, options, font, text) in enumerate(cases):
+        object_id = 7000 + index
+        objects.append(u16(object_id) + u8(6) + u16(140) + u16(50) + u8(background) + u8(border) + u8(index + 1) + u8(options) +
+                       u8(1) + u8(0) + u16(object_id + 100) + i16(10) + i16(19))
+        objects.append(label(object_id + 100, 120, 12, text, font))
+        children.append(u16(object_id) + i16(10 + (index % 3) * 155) + i16(10 + (index // 3) * 65))
+    objects.append(u16(7020) + u8(6) + u16(24) + u16(24) + u8(7) + u8(0) + u8(20) + u8(0) + u8(0) + u8(0))  # Small, no label
+    children.append(u16(7020) + i16(330) + i16(220))
+    return pool(children, objects)
+
+
+def picture(object_id, size):
+    """A green square picture with a white diagonal, 8-bit colour."""
+    data = bytes(1 if abs(x - y) < 3 else 2 for y in range(size) for x in range(size))
+    return (u16(object_id) + u8(20) + u16(size) + u16(size) + u16(size) + u8(2) + u8(0) + u8(0) + u32(len(data)) + u8(0) + data)
+
+
+def input_list_marker():
+    """Input Lists with text, dark and picture items, enabled and disabled, and too small for the arrows."""
+    cases = [  # width, height, options, items, text
+        (180, 24, 1, [8000, 8001], "Text, enabled"),
+        (180, 24, 0, [8000, 8001], "Text, disabled"),
+        (180, 24, 1, [8002], "Black item, enabled"),
+        (48, 32, 1, [8003], "Picture 48x32"),
+        (24, 24, 1, [8004], "Picture 24x24"),
+        (20, 24, 1, [8005], "20 px wide"),
+        (180, 10, 1, [8006], "10 px high"),
+        (180, 24, 1, [8007], "Right justified"),
+        (180, 24, 1, [], "No items"),
+        (180, 60, 1, [8000], "60 px high"),
+    ]
+    objects = [
+        u16(100) + u8(23) + u8(0) + u8(2) + u8(0) + u8(0) + u8(0),  # Font attributes: black 8x12
+        u16(101) + u8(23) + u8(1) + u8(2) + u8(0) + u8(0) + u8(0),  # Font attributes: white 8x12
+        label(8000, 180, 24, "Seeder"),
+        label(8001, 180, 24, "Sprayer"),
+        label(8002, 180, 24, "Black background", 101, background=0, options=0),
+        u16(8003) + u8(3) + u16(48) + u16(32) + u8(0) + u8(1) + u8(0) + u16(8013) + i16(12) + i16(4),  # Container with the picture
+        picture(8004, 24),
+        label(8005, 20, 24, "AB"),
+        label(8006, 180, 10, "Ten"),
+        label(8007, 180, 24, "Right justified text", justification=2),
+        picture(8013, 24),
+    ]
+    children = []
+    for index, (width, height, options, items, text) in enumerate(cases):
+        object_id = 8100 + index
+        y = 10 + index * 40
+        objects.append(u16(object_id) + u8(10) + u16(width) + u16(height) + u16(0xFFFF) + u8(0) + u8(len(items)) + u8(options) +
+                       u8(0) + b"".join(u16(item) for item in items))
+        objects.append(label(object_id + 100, 200, 12, text))
+        children.append(u16(object_id + 100) + i16(10) + i16(y + 6))
+        children.append(u16(object_id) + i16(220) + i16(y))
+    return pool(children, objects)
+
+
 def main():
     pools = {
         "test-rectangle-line-suppression": rectangle_line_suppression(),
@@ -173,6 +255,8 @@ def main():
         "test-output-number-rounding": output_number_rounding(),
         "test-focus-frame": focus_frame(),
         "test-string-wrap-strike-through": string_wrap_strike_through(),
+        "test-button-border": button_border(),
+        "test-input-list-marker": input_list_marker(),
     }
     for slug, data in pools.items():
         folder = ROOT / slug
